@@ -1,5 +1,5 @@
-import axios from "axios";
 import { AddressFormData } from "../types/Address";
+import { api } from "./api";
 
 // הנתונים הדרושים למערך של מוצרים
 interface CartItemPayment {
@@ -19,11 +19,5 @@ interface DataPayment {
 
 // בקשת תשלום
 export const paymentApi = async (data: DataPayment) => {
-  return await axios.post(
-    "http://localhost:5000/api/payment/capture-order",
-    data,
-    {
-      withCredentials: true,
-    }
-  );
+  return await api.post("/payment/capture-order", data);
 };

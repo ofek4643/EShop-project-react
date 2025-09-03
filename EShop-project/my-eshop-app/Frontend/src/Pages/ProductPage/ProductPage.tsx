@@ -41,10 +41,6 @@ const ProductPage = () => {
         setDescription(data.description);
         setImageUrl(data.imageUrl);
         setStock(data.stock);
-        const itemInCart = cartToShow.find(
-          (item) => item._id.toString() === productId
-        );
-        setLocalAmountInCart(itemInCart ? itemInCart.amount : 0);
       } catch (error) {
         handleAxiosError(error);
       } finally {
@@ -52,7 +48,7 @@ const ProductPage = () => {
       }
     }
     getProduct();
-  }, [productId, cartToShow]);
+  }, [productId]);
 
   const handleAddToCart = async (): Promise<void> => {
     if (!user) {

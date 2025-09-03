@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from "./api";
 
 // הנתונים להוספה לעגלה
 interface DataAddToCart {
@@ -21,60 +21,37 @@ interface DataSyncCart {
 
 // משיכת העגלה
 export const fetchCart = async () => {
-  const res = await axios.get("http://localhost:5000/api/cart", {
-    withCredentials: true,
-  });
+  const res = await api.get("/cart");
   return res.data;
 };
 
 // הוספה לעגלה
 export const addToCartApi = async (data: DataAddToCart) => {
-  const res = await axios.post(`http://localhost:5000/api/cart/addItem`, data, {
-    withCredentials: true,
-  });
+  const res = await api.post(`/cart/addItem`, data);
   return res.data;
 };
 
 // הוספת כמות מוצר אחד לעגלה
 export const addOneItemCart = async (data: DataUpdateItem) => {
-  const res = await axios.put(
-    `http://localhost:5000/api/cart/addOneItem`,
-    data,
-    {
-      withCredentials: true,
-    }
-  );
+  const res = await api.put(`/cart/addOneItem`, data);
   return res.data;
 };
 
 // הסרת כמות מוצר אחד לעגלה
 export const removeOneItemCart = async (data: DataUpdateItem) => {
-  const res = await axios.put(
-    `http://localhost:5000/api/cart/removeOneItem`,
-    data,
-    {
-      withCredentials: true,
-    }
-  );
+  const res = await api.put(`/cart/removeOneItem`, data);
   return res.data;
 };
 
 // הסרת מוצר מהעגלה
 export const removeItemCart = async (data: DataUpdateItem) => {
-  const res = await axios.delete(`http://localhost:5000/api/cart/removeItem`, {
-    withCredentials: true,
-    data,
-  });
+  const res = await api.delete(`/cart/removeItem`, { data });
   return res.data;
 };
 export const syncCart = async (data: DataSyncCart) => {
-  await axios.post(`http://localhost:5000/api/cart/sync`, data, {
-    withCredentials: true,
-  });
+  await api.post(`/cart/sync`, data);
 };
 
 export const clearCartApi = async () => {
-  await axios.delete(`http://localhost:5000/api/cart/clear`, {
-    withCredentials: true,
-  });
+  await api.delete(`/cart/clear`);
 };

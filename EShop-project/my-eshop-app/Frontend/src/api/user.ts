@@ -1,5 +1,5 @@
-import axios from "axios";
 import { User } from "../types/User";
+import { api } from "./api";
 
 // הנתונים הדרושים לעדכון המשתמש והסוג שלהם
 interface UpdateProfileData {
@@ -11,22 +11,16 @@ interface UpdateProfileData {
 
 // שליפת נתוני המשתמש המחובר מהשרת
 export const getUser = async (): Promise<User> => {
-  const res = await axios.get<User>("http://localhost:5000/api/user", {
-    withCredentials: true,
-  });
+  const res = await api.get<User>("/user");
   return res.data;
 };
 
 // מחיקת המשתמש מהDB
 export const deleteUserApi = async () => {
-  return await axios.delete("http://localhost:5000/api/user/delete", {
-    withCredentials: true,
-  });
+  return await api.delete("/user/delete");
 };
 
 // עדכון פרטי המשתמש
 export const updateUserApi = async (data: UpdateProfileData) => {
-  return await axios.put("http://localhost:5000/api/user/profile", data, {
-    withCredentials: true,
-  });
+  return await api.put("http://localhost:5000/api/user/profile", data);
 };

@@ -1,21 +1,13 @@
-import axios from "axios";
+import { api } from "./api";
 
 export const getOrderApi = async (id: string) => {
-  return await axios.get(`http://localhost:5000/api/order/${id}`, {
-    withCredentials: true,
-  });
+  return await api.get(`/order/${id}`);
 };
 
 export const OrderUpdateDelivered = async (id: string) => {
-  return await axios.put(
-    `http://localhost:5000/api/order/${id}`,
-    {},
-    { withCredentials: true }
-  );
+  return await api.put(`/order/${id}`, {});
 };
 
 export const getAllOrderApi = async () => {
-  return await axios.get(`http://localhost:5000/api/order`, {
-    withCredentials: true,
-  });
+  return await api.get(`/order`);
 };
