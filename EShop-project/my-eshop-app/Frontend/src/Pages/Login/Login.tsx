@@ -55,7 +55,6 @@ const Login: React.FC = () => {
     try {
       setLoading(true);
       const res = await loginUser({ email, password });
-      toast.success(res.data.message);
       await dispatch(getUserThunk());
       const guestItems = store.getState().cart.items;
       if (guestItems.length > 0) {
@@ -63,6 +62,7 @@ const Login: React.FC = () => {
         await dispatch(fetchUserCartThunk());
         dispatch(mergeGuestToUserCart());
       }
+      toast.success(res.data.message);
       navigate("/");
     } catch (error) {
       handleAxiosError(error);
