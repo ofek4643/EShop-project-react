@@ -12,13 +12,23 @@ import cartRouter from "./routes/cartRoute";
 import paymentRouter from "./routes/paymentRoute";
 import orderRouter from "./routes/orderRoute";
 
-
 // קריאת ENV
 dotenv.config();
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://eshop-project-react-1.onrender.com",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -45,5 +55,5 @@ app.use("/api/order", orderRouter);
 
 // הפעלת השרת
 app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
+  console.log(`🚀 Server running on port ${port}`);
 });
