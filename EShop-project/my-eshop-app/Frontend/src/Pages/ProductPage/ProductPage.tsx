@@ -21,7 +21,6 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(false);
   const [popout, setPopout] = useState(false);
   const [popoutError, setPopoutError] = useState(false);
-  const [localAmountInCart, setLocalAmountInCart] = useState(0);
   // שימוש בחנות בשביל נתונים
   const dispatch = useDispatch<AppDispatch>();
   const items = useSelector((state: RootState) => state.cart.items);
@@ -49,13 +48,11 @@ const ProductPage = () => {
     }
     getProduct();
   }, [productId]);
-
+  const cartItem = cartToShow.find((item) => item._id === productId);
+  const quantityInCart = cartItem ? cartItem.amount : 0;
   const handleAddToCart = async (): Promise<void> => {
     if (!user) {
       if (!productId) return;
-
-      const cartItem = cartToShow.find((item) => item._id === productId);
-      const quantityInCart = cartItem ? cartItem.amount : 0;
 
       if (quantityInCart + amount > stock) {
         setPopoutError(true);
@@ -73,7 +70,6 @@ const ProductPage = () => {
           imageUrl,
         })
       );
-      setLocalAmountInCart((prev) => prev + amount);
       toast.success("המוצר נוסף לעגלת אורח");
       setPopout(true);
       return; // יוצאים מהפונקציה, לא קוראים לשרת
@@ -88,7 +84,6 @@ const ProductPage = () => {
       if (res.productStock !== undefined) {
         setStock(res.productStock);
       }
-      setLocalAmountInCart((prev) => prev + amount);
       toast.success(res.message);
       await dispatch(fetchUserCartThunk());
       setPopout(true);
@@ -211,7 +206,7 @@ const ProductPage = () => {
                   <p className={styles.textPopout}>
                     לא ניתן להוסיף את הכמות שבחרת לעגלה.
                     <br />
-                    המלאי הזמין: <b>{stock - localAmountInCart}</b> בלבד.
+                    המלאי הזמין: <b>{stock - quantityInCart}</b> בלבד.
                   </p>
 
                   <div className={styles.actions}>
