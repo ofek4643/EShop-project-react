@@ -54,7 +54,10 @@ const ProductPage = () => {
     if (!user) {
       if (!productId) return;
 
-      if (localAmountInCart + amount > stock) {
+      const cartItem = cartToShow.find((item) => item._id === productId);
+      const quantityInCart = cartItem ? cartItem.amount : 0;
+
+      if (quantityInCart + amount > stock) {
         setPopoutError(true);
         return; // לא מוסיפים לעגלה
       }
