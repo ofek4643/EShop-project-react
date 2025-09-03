@@ -62,10 +62,7 @@ export const register = async (
       expiresIn: "15m",
     });
 
-    const FRONTEND_URL =
-      process.env.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-        : "http://localhost:5173";
+    const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
     const verifyUrl = `${FRONTEND_URL}/verify/${newUser._id}/${verificationToken}`;
 
@@ -205,10 +202,7 @@ export const forgotPassword = async (
       expiresIn: "15m",
     });
 
-    const FRONTEND_URL =
-      process.env.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-        : "http://localhost:5173";
+    const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
     const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
 

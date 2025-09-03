@@ -207,9 +207,6 @@ export const syncCart = async (
         { $inc: { amount } },
         { upsert: true, new: true }
       );
-
-      // הורדת מלאי מהמוצר
-      await Product.findByIdAndUpdate(productId, { $inc: { stock: -amount } });
     }
 
     return res.status(200).json({ message: "העגלות התחברו" });
