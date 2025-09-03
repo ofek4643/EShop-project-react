@@ -9,8 +9,8 @@ export const getUserThunk = createAsyncThunk(
     try {
       const data = await getUser();
       return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
+    } catch (error: any) {
+      return rejectWithValue(error);
     }
   }
 );
