@@ -62,8 +62,8 @@ const Login: React.FC = () => {
         await dispatch(fetchUserCartThunk());
         dispatch(mergeGuestToUserCart());
       }
-      toast.success(res.data.message);
       navigate("/");
+      toast.success(res.data.message);
     } catch (error) {
       handleAxiosError(error);
     } finally {
