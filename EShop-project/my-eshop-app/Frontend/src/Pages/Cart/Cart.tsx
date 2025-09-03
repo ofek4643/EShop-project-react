@@ -1,4 +1,4 @@
-import styles from "./cart.module.css";
+import styles from "./Cart.module.css";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
