@@ -54,6 +54,11 @@ const ProductPage = () => {
     if (!user) {
       if (!productId) return;
 
+      if (localAmountInCart + amount > stock) {
+        setPopoutError(true);
+        return; // לא מוסיפים לעגלה
+      }
+
       // משתמש לא מחובר → עגלת אורח
       dispatch(
         addToCart({

@@ -62,7 +62,12 @@ export const register = async (
       expiresIn: "15m",
     });
 
-    const verifyUrl = `${process.env.FRONTEND_URL}/verify/${newUser._id}/${verificationToken}`;
+    const FRONTEND_URL =
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL
+        : "http://localhost:5173";
+
+    const verifyUrl = `${FRONTEND_URL}/verify/${newUser._id}/${verificationToken}`;
 
     await sendEmail(
       email,
@@ -200,7 +205,12 @@ export const forgotPassword = async (
       expiresIn: "15m",
     });
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const FRONTEND_URL =
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL
+        : "http://localhost:5173";
+
+    const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
 
     await sendEmail(
       user.email,
