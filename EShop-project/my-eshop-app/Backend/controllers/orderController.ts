@@ -1,5 +1,4 @@
 import Order from "../models/Order";
-import User from "../models/User";
 
 export const getOrder = async (req, res) => {
   try {
@@ -36,11 +35,23 @@ export const updateDelivered = async (req, res) => {
   }
 };
 
-export const getAllOrder = async (req, res) => {
+export const getAllOrderUser = async (req, res) => {
   try {
     const userId = req.user.userId;
     const orders = await Order.find({ userId }).sort({ createdAt: -1 });
-    res.status(200).json(orders);
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "אירעה שגיאה בשרת, נסה שוב מאוחר יותר" });
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    return res.status(200).json(orders);
   } catch (error) {
     console.error(error);
     return res

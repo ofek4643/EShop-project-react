@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 // קומפוננטה של דף הבית
 const Home = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [featuredImages, setFeaturedImages] = useState<Product[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -19,10 +20,7 @@ const Home = () => {
   const currentProducts = products.slice(
     startIndex,
     startIndex + PRODUCTS_PER_PAGE
-  );
-  const featuredImages = products.slice(0, 3);
-
-  // פוקנציה לדף הבא של המוצרים המובחרים
+  ); // פוקנציה לדף הבא של המוצרים המובחרים
   const nextSlide = () =>
     setCurrentSlide((prev) => (prev + 1) % featuredImages.length);
 
@@ -39,6 +37,7 @@ const Home = () => {
         setLoading(true);
         const data = await fetchProducts();
         setProducts(data);
+        setFeaturedImages(data.slice(0, 3));
       } catch (error) {
         handleAxiosError(error);
       } finally {

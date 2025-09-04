@@ -11,7 +11,7 @@ interface MyJwtPayload extends JwtPayload {
   role: string;
   userName: string;
 }
-
+      
 // הרחבת טיפוס ה־ Request של Express כך שיכיל שדה user (שיתווסף אחרי אימות הטוקן)
 declare module "express-serve-static-core" {
   interface Request {
