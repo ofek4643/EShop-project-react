@@ -60,12 +60,12 @@ const Home = () => {
   return (
     <div className={styles.home}>
       {loading && <div className={styles.loadingSpinner}></div>}
-      {featuredImages.length > 0 && (
+      {featuredImages?.length > 0 && (
         <div className={styles.carousel}>
           <img
             src={featuredImages[currentSlide]?.imageUrl}
             className={styles.carouselImage}
-            alt={featuredImages[currentSlide].name}
+            alt={featuredImages[currentSlide]?.name}
           />
           <button className={styles.arrowLeft} onClick={prevSlide}>
             ❮
@@ -75,8 +75,8 @@ const Home = () => {
           </button>
           <div className={styles.caption}>
             <div className={styles.info}>
-              {featuredImages[currentSlide].name} (₪
-              {featuredImages[currentSlide].price})
+              {featuredImages[currentSlide]?.name} (₪
+              {featuredImages[currentSlide]?.price})
             </div>
           </div>
         </div>

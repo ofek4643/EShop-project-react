@@ -33,9 +33,7 @@ const MyOrders = () => {
           ההזמנות שלי
         </button>
       </div>
-
       <h2 className={styles.title}>ההזמנות שלי</h2>
-
       {loading ? (
         <div className={styles.loadingContainer}>
           <span className={styles.loadingSpinner}></span>
