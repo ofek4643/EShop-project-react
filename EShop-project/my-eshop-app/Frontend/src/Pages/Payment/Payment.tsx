@@ -11,6 +11,7 @@ import { AppDispatch } from "../../store/store";
 import { clearUserCart } from "../../store/slices/cartSlice";
 import { clearCartApi } from "../../api/Cart";
 import { AddressFormData } from "../../types/Address";
+import { useState } from "react";
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Payment = () => {
     0
   );
   const totalPriceStr = totalPrice.toFixed(2);
+  const [loading, setLoading] = useState(false);
 
   // פונקציה ששולחת את פרטי ההזמנה ל-backend לאחר אישור התשלום
   const handleCaptureOrder = async () => {
@@ -35,6 +37,7 @@ const Payment = () => {
       return;
     }
     try {
+      setLoading(true);
       const res = await paymentApi({
         items: userCart.map((item) => ({
           productId: item._id,
@@ -52,8 +55,11 @@ const Payment = () => {
       localStorage.removeItem("currentAddress");
       const orderId = res.data.order._id;
       navigate(`/order/${orderId}`);
+      toast.success(`התשלום בוצע בהצלחה!`);
     } catch (error) {
       handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,42 +71,45 @@ const Payment = () => {
       }}
     >
       <div className={styles.main}>
-        <div className={styles.container}>
-          <h2 className={styles.title}>אפשרויות תשלום</h2>
+        {loading ? (
+          <div className={styles.loadingSpinner}></div>
+        ) : (
+          <div className={styles.container}>
+            <h2 className={styles.title}>אפשרויות תשלום</h2>
 
-          <PayPalButtons
-            style={{ layout: "vertical" }}
-            createOrder={(_, actions) => {
-              return actions.order?.create({
-                intent: "CAPTURE",
-                purchase_units: [
-                  {
-                    amount: {
-                      currency_code: "ILS",
-                      value: totalPriceStr,
+            <PayPalButtons
+              style={{ layout: "vertical" }}
+              createOrder={(_, actions) => {
+                return actions.order?.create({
+                  intent: "CAPTURE",
+                  purchase_units: [
+                    {
+                      amount: {
+                        currency_code: "ILS",
+                        value: totalPriceStr,
+                      },
                     },
-                  },
-                ],
-              });
-            }}
-            onApprove={async (_data, actions) => {
-              if (!actions?.order) {
-                toast.error("קרתה שגיאה: Order לא קיים");
-                return;
-              }
+                  ],
+                });
+              }}
+              onApprove={async (_data, actions) => {
+                if (!actions?.order) {
+                  toast.error("קרתה שגיאה: Order לא קיים");
+                  return;
+                }
 
-              const details = await actions.order.capture();
+                const details = await actions.order.capture();
 
-              const orderID = details.id;
-              if (!orderID) {
-                toast.error("קרתה שגיאה: Order ID לא קיים");
-                return;
-              }
-              toast.success(`התשלום בוצע בהצלחה!`);
-              await handleCaptureOrder();
-            }}
-          />
-        </div>
+                const orderID = details.id;
+                if (!orderID) {
+                  toast.error("קרתה שגיאה: Order ID לא קיים");
+                  return;
+                }
+                await handleCaptureOrder();
+              }}
+            />
+          </div>
+        )}
       </div>
     </PayPalScriptProvider>
   );

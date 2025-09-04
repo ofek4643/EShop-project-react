@@ -13,7 +13,7 @@ import {
   removeItemThunk,
 } from "../../store/slices/cartSlice";
 import { Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Cart = () => {
   // משיכה ושימוש בפועלות ונתונים בחנות
@@ -22,6 +22,7 @@ const Cart = () => {
   const userCart = useSelector((state: RootState) => state.cart.userCart);
   const user = useSelector((state: RootState) => state.user.user);
   const cartToShow = user ? userCart : items;
+  const [loading, setLoading] = useState(false);
 
   const totalItems = cartToShow.reduce((sum, item) => sum + item.amount, 0);
   const totalPrice = cartToShow.reduce(
@@ -49,8 +50,10 @@ const Cart = () => {
   // הוספת מוצר אחד קיים בחנות
   const handleAddOne = async (itemId: string) => {
     if (user) {
+      setLoading(true);
       await dispatch(addOneItemThunk(itemId));
-      dispatch(fetchUserCartThunk());
+      await dispatch(fetchUserCartThunk());
+      setLoading(false);
     } else {
       dispatch(addOneItem(itemId));
     }
@@ -59,8 +62,10 @@ const Cart = () => {
   // הסרת מוצר אחד קיים בחנות
   const handleRemoveOne = async (itemId: string) => {
     if (user) {
+      setLoading(true);
       await dispatch(removeOneItemThunk(itemId));
       await dispatch(fetchUserCartThunk());
+      setLoading(false);
     } else {
       dispatch(removeOneItem(itemId));
     }
@@ -69,8 +74,10 @@ const Cart = () => {
   // הסרת מוצר בחנות
   const handleRemoveItem = async (itemId: string) => {
     if (user) {
+      setLoading(true);
       await dispatch(removeItemThunk(itemId));
       await dispatch(fetchUserCartThunk());
+      setLoading(false);
     } else {
       dispatch(removeFromCart(itemId));
     }
@@ -102,6 +109,7 @@ const Cart = () => {
 
               <div className={styles.quantityControls}>
                 <button
+                  disabled={loading}
                   className={styles.minusBtn}
                   onClick={() => handleRemoveOne(item._id)}
                 >
@@ -110,13 +118,14 @@ const Cart = () => {
                 <span className={styles.amount}>{item.amount}</span>
 
                 <button
-                  disabled={item.amount >= item.stock}
+                  disabled={item.amount >= item.stock || loading}
                   className={styles.plusBtn}
                   onClick={() => handleAddOne(item._id)}
                 >
                   +
                 </button>
                 <button
+                  disabled={loading}
                   className={styles.removeBtn}
                   onClick={() => handleRemoveItem(item._id)}
                 >

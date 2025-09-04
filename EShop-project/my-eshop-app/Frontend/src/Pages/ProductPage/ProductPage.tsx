@@ -18,7 +18,9 @@ const ProductPage = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [stock, setStock] = useState(0);
   const [amount, setAmount] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingAdd, setLoadingAdd] = useState(false);
+
   const [popout, setPopout] = useState(false);
   const [popoutError, setPopoutError] = useState(false);
   // שימוש בחנות בשביל נתונים
@@ -33,7 +35,7 @@ const ProductPage = () => {
     async function getProduct() {
       if (!productId) return;
       try {
-        setLoading(true);
+        setLoadingPage(true);
         const data = await fetchProductById(productId);
         setName(data.name);
         setPrice(data.price);
@@ -43,7 +45,7 @@ const ProductPage = () => {
       } catch (error) {
         handleAxiosError(error);
       } finally {
-        setLoading(false);
+        setLoadingPage(false);
       }
     }
     getProduct();
@@ -77,25 +79,23 @@ const ProductPage = () => {
 
     // משתמש מחובר → הולך לשרת
     try {
+      setLoadingAdd(true);
       if (!productId) return;
-
       const res = await addToCartApi({ productId, amount });
-
-      if (res.productStock !== undefined) {
-        setStock(res.productStock);
-      }
-      toast.success(res.message);
       await dispatch(fetchUserCartThunk());
       setPopout(true);
+      toast.success(res.message);
     } catch (err) {
       handleAxiosError(err);
       setPopoutError(true);
+    } finally {
+      setLoadingAdd(false);
     }
   };
 
   return (
     <div className={styles.wrapper}>
-      {loading ? (
+      {loadingPage ? (
         <div className={styles.loadingSpinner}></div>
       ) : (
         <div>
@@ -128,10 +128,22 @@ const ProductPage = () => {
                     </select>
                   </div>
                   <button
+                    disabled={loadingAdd}
                     onClick={handleAddToCart}
-                    className={styles.addToCartBtn}
+                    className={
+                      loadingAdd
+                        ? styles.addToCartBtnLoading
+                        : styles.addToCartBtn
+                    }
                   >
-                    הוספה לסל
+                    {loadingAdd ? (
+                      <>
+                        <span>מוסיף...</span>
+                        <span className={styles.loadingSpinnerAdd}></span>
+                      </>
+                    ) : (
+                      "הוספה לסל"
+                    )}
                   </button>
                 </>
               ) : (

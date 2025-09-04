@@ -104,6 +104,11 @@
   background: #dc3545;
   color: white;
 }
+.minusBtn:disabled {
+  cursor: not-allowed;
+  background: #ccc;
+  color: #666;
+}
 
 .removeBtn {
   background: #f1f1f1;
@@ -113,6 +118,12 @@
 .removeBtn:hover {
   background: #ffdddd;
   color: #c00;
+}
+
+.removeBtn:disabled {
+  cursor: not-allowed;
+  background: #ccc;
+  color: #666;
 }
 
 .amount {
