@@ -63,7 +63,7 @@ const Home = () => {
       {featuredImages.length > 0 && (
         <div className={styles.carousel}>
           <img
-            src={featuredImages[currentSlide].imageUrl}
+            src={featuredImages[currentSlide]?.imageUrl}
             className={styles.carouselImage}
             alt={featuredImages[currentSlide].name}
           />
