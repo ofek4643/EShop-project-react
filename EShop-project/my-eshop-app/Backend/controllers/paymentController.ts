@@ -11,6 +11,7 @@ interface AuthRequest extends Request {
     userId: string;
     role: string;
     userName: string;
+    email: string;
   };
 }
 // פונקציה ליצירת הזמנה
@@ -18,16 +19,13 @@ export const captureOrder = async (
   req: AuthRequest,
   res: Response
 ): Promise<Response> => {
-  console.log("captureOrder called");
-
   const {
     items,
     totalPrice,
     address,
   }: { items: OrderItem[]; totalPrice: string; address: AddressFormData } =
     req.body;
-  const { userId, userName } = req.user;
-  console.log(userName, userId);
+  const { userId, userName, email } = req.user;
 
   try {
     // בדיקה אם יש מספיק מלאי לכל המוצרים
@@ -54,6 +52,7 @@ export const captureOrder = async (
     const newOrder = await Order.create({
       userId,
       userName,
+      email,
       items,
       totalPrice,
       isDelivered: false,

@@ -10,6 +10,7 @@ interface MyJwtPayload extends JwtPayload {
   userId: string;
   role: string;
   userName: string;
+  email : string
 }
       
 // הרחבת טיפוס ה־ Request של Express כך שיכיל שדה user (שיתווסף אחרי אימות הטוקן)

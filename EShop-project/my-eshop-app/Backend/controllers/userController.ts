@@ -10,6 +10,7 @@ interface AuthRequest extends Request {
     userId: string;
     role: string;
     userName: string;
+    email: string;
   };
 }
 
@@ -20,7 +21,7 @@ export const fetchUser = async (
 ): Promise<void> => {
   try {
     const id = req.user.userId;
-    const user = await User.findById(id).select("userName email _id");
+    const user = await User.findById(id);
     if (!user) {
       res.status(404).json({ message: "משתמש לא נמצא" });
     }
@@ -93,6 +94,46 @@ export const updateProfile = async (
 
     await user.save();
     return res.status(200).json({ message: "יוזר עודכן בהצלחה" });
+  } catch (error) {
+    return res.status(500).json({ error: "שגיאה בשרת" });
+  }
+};
+
+export const totalUsers = async (
+  req: AuthRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    const users = await User.find().sort({ createAt: -1 });
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ error: "שגיאה בשרת" });
+  }
+};
+
+export const deleteUser = async (
+  req: AuthRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    return res.status(200).json("משתתמש נמחק בהצלחה");
+  } catch (error) {
+    return res.status(500).json({ error: "שגיאה בשרת" });
+  }
+};
+
+export const fetchUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ error: "משתמש לא נמצא" });
+    }
+
+    return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({ error: "שגיאה בשרת" });
   }

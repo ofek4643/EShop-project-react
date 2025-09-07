@@ -59,3 +59,26 @@ export const getAllOrders = async (req, res) => {
       .json({ error: "אירעה שגיאה בשרת, נסה שוב מאוחר יותר" });
   }
 };
+
+export const getOrdersAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const orders = await Order.find({ userId: id }).sort({ createdAt: -1 });
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "אירעה שגיאה בשרת, נסה שוב מאוחר יותר" });
+  }
+};
+
+export const deleteOrdersAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Order.findByIdAndDelete(id);
+    return res.status(200).json("הזמנה נמחקה בהצלחה");
+  } catch (error) {
+    return res.status(500).json({ error: "שגיאה בשרת" });
+  }
+};

@@ -6,11 +6,15 @@ import {
   logout,
   forgotPassword,
   resetPassword,
+  loginAdmin,
+  verifyAdminOtp,
 } from "../controllers/authController";
 import { authMiddleware } from "../middleware/authMiddleware.ts";
 import express from "express";
 const router = express.Router();
 
+router.post("/admin/verify-otp", verifyAdminOtp);
+router.post("/admin/login", loginAdmin);
 router.post("/register", register);
 router.get("/verify/:userId/:token", verifyUser);
 router.post("/login", login);
