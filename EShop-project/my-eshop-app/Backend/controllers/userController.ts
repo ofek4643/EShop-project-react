@@ -93,7 +93,7 @@ export const updateProfile = async (
     user.email = email;
 
     await user.save();
-    return res.status(200).json({ message: "יוזר עודכן בהצלחה" });
+    return res.status(200).json({ message: "יוזר עודכן בהצלחה", user: user });
   } catch (error) {
     return res.status(500).json({ error: "שגיאה בשרת" });
   }

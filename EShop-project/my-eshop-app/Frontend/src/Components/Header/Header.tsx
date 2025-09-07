@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser} from "../../store/slices/userSlice";
+import { clearUser, getUserThunk } from "../../store/slices/userSlice";
 import { RootState, AppDispatch } from "../../store/store";
 import { useNavigate } from "react-router-dom";
 import {
@@ -27,7 +27,7 @@ const Header: React.FC = () => {
   const items = useSelector((state: RootState) => state.cart.items);
   const userCart = useSelector((state: RootState) => state.cart.userCart);
 
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, status } = useSelector((state: RootState) => state.user);
   const totalItems = user
     ? userCart.reduce((sum, item) => sum + item.amount, 0)
     : items.reduce((sum, item) => sum + item.amount, 0);
@@ -36,10 +36,11 @@ const Header: React.FC = () => {
   // ברגע שטוענים את הדף את כמות המוצרים של המשתמש בעגלה על מנת להראות בheader
 
   useEffect(() => {
-    if (user) {
+    if (status === "idle") {
+      dispatch(getUserThunk());
       dispatch(fetchUserCartThunk());
     }
-  }, [user, dispatch]);
+  }, [dispatch, status]);
 
   //פונקציה להתנתקות
   const logout = async () => {
