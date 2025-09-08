@@ -104,7 +104,7 @@ export const totalUsers = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const users = await User.find().sort({ createAt: -1 });
+    const users = await User.find().sort({ createdAt: -1 });
     return res.status(200).json(users);
   } catch (error) {
     return res.status(500).json({ error: "שגיאה בשרת" });
@@ -134,6 +134,49 @@ export const fetchUserById = async (req, res) => {
     }
 
     return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ error: "שגיאה בשרת" });
+  }
+};
+
+export const fetchAdmin = async (
+  req: AuthRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    const adminId = req.user.userId;
+    const admin = await User.findById(adminId);
+
+    if (!admin) {
+      return res.status(404).json({ error: "לא קיים מנהל" });
+    }
+
+    return res.status(200).json(admin);
+  } catch (error) {
+    return res.status(500).json({ error: "שגיאה בשרת" });
+  }
+};
+
+export const switchPermissions = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { id } = req.params;
+    const { newRole } = req.body;
+    const user = await User.findById(id);
+    const admin = await User.findById(userId);
+    
+    if (admin?.role !== "superAdmin") {
+      return res.status(403).json({ error: "אין לך הרשאה לשנות הרשאות" });
+    }
+    if (!user) {
+      return res.status(404).json({ error: "משתמש לא קיים" });
+    }
+    if (!newRole || (newRole !== "user" && newRole !== "admin")) {
+      return res.status(400).json({ error: "רול לא קיים" });
+    }
+    user.role = newRole;
+    await user.save();
+    return res.status(201).json({ message: "הראשות עודכנו בהצלחה" });
   } catch (error) {
     return res.status(500).json({ error: "שגיאה בשרת" });
   }

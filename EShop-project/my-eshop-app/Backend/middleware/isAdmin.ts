@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import type { MyJwtPayload } from "./authMiddleware";
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -6,7 +7,7 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json({ error: "משתמש לא מחובר" });
     }
 
-    if (req.user.role !== "admin") {
+    if (req.user.role === "user") {
       return res.status(403).json({ error: "אין לך הרשאה" });
     }
 

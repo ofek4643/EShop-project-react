@@ -392,6 +392,13 @@ export const verifyAdminOtp = async (
     user.codeExpiresAt = undefined;
     await user.save();
 
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    });
+
     // יצירת טוקן התחברות אמיתי (1 יום למשל)
     const loginToken = jwt.sign(
       {
@@ -412,7 +419,15 @@ export const verifyAdminOtp = async (
       path: "/",
     });
 
-    return res.status(200).json({ message: "התחברת בהצלחה!" });
+    return res.status(200).json({
+      message: "התחברת בהצלחה!",
+      user: {
+        _id: user._id,
+        role: user.role,
+        userName: user.userName,
+        email: user.email,
+      },
+    });
   } catch (error) {
     console.error(error);
     return res

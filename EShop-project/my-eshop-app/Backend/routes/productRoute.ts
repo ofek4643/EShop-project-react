@@ -8,13 +8,15 @@ import {
   updateProductById,
 } from "../controllers/productController";
 import { isAdmin } from "../middleware/isAdmin.ts";
+import { authMiddleware } from "../middleware/authMiddleware.ts";
+
 const router = express.Router();
 
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
-router.put("/:id", isAdmin, updateProductById);
-router.post("/", isAdmin, addProduct);
-router.delete("/:id", isAdmin, deleteProduct);
+router.put("/:id", authMiddleware, isAdmin, updateProductById);
+router.post("/", authMiddleware, isAdmin, addProduct);
+router.delete("/:id", authMiddleware, isAdmin, deleteProduct);
 
 // ייצוא ה־Router לשימוש ב־ server.ts
 export default router;

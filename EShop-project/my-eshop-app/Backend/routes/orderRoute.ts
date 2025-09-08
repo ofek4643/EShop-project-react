@@ -12,9 +12,9 @@ import { isAdmin } from "../middleware/isAdmin.ts";
 import express from "express";
 const router = express.Router();
 
-router.delete("/admin/:id", isAdmin, deleteOrdersAdmin);
-router.get("/admin/userOrders/:id", isAdmin, getOrdersAdmin);
-router.get("/admin", isAdmin, getAllOrders);
+router.delete("/admin/:id", authMiddleware, isAdmin, deleteOrdersAdmin);
+router.get("/admin/userOrders/:id", authMiddleware, isAdmin, getOrdersAdmin);
+router.get("/admin", authMiddleware, isAdmin, getAllOrders);
 router.get("/:id", authMiddleware, getOrder);
 router.put("/:id", authMiddleware, updateDelivered);
 router.get("/", authMiddleware, getAllOrderUser);

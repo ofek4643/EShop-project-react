@@ -6,7 +6,7 @@ export const { TokenExpiredError, JsonWebTokenError } = jwt;
 import { Request, Response, NextFunction } from "express";
 
 // הרחבת ה־ Payload כך שיכלול מידע נוסף על המשתמש (שאתה שומר בטוקן)
-interface MyJwtPayload extends JwtPayload {
+export interface MyJwtPayload extends JwtPayload {
   userId: string;
   role: string;
   userName: string;
