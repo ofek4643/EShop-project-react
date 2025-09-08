@@ -7,14 +7,14 @@ import {
   getProductById,
   updateProductById,
 } from "../controllers/productController";
-
+import { isAdmin } from "../middleware/isAdmin.ts";
 const router = express.Router();
 
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
-router.put("/:id", updateProductById); // admin
-router.post("/", addProduct);
-router.delete("/:id", deleteProduct);
+router.put("/:id", isAdmin, updateProductById);
+router.post("/", isAdmin, addProduct);
+router.delete("/:id", isAdmin, deleteProduct);
 
 // ייצוא ה־Router לשימוש ב־ server.ts
 export default router;

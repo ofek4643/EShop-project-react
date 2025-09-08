@@ -329,7 +329,7 @@ export const loginAdmin = async (
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 15 * 60 * 1000,
       path: "/",
     });
 
@@ -348,8 +348,8 @@ export const verifyAdminOtp = async (
 ): Promise<Response> => {
   try {
     const { code }: { code: string } = req.body;
-    const {token} = req.cookies
- 
+    const { token } = req.cookies;
+
     if (!code || code.length !== 6) {
       return res.status(400).json({ error: "קוד לא תקין" });
     }
@@ -401,14 +401,14 @@ export const verifyAdminOtp = async (
         email: user.email,
       },
       JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "4h" }
     );
 
     res.cookie("token", loginToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 4 * 60 * 60 * 1000,
       path: "/",
     });
 
