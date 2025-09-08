@@ -56,7 +56,6 @@ export const addProduct = async (
   }
 };
 
-// משיכה מוצר על פי ID
 export const getProductById = async (
   req: Request,
   res: Response

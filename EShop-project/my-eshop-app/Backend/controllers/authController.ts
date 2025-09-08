@@ -361,7 +361,6 @@ export const verifyAdminOtp = async (
     const JWT_SECRET = process.env.JWT_SECRET;
     if (!JWT_SECRET) throw new Error("Missing JWT_SECRET");
 
-    // אימות טוקן זמני
     let decoded: MyJwtPayload;
     try {
       decoded = jwt.verify(token, JWT_SECRET) as MyJwtPayload;
@@ -372,13 +371,11 @@ export const verifyAdminOtp = async (
       return res.status(401).json({ error: "טוקן לא חוקי" });
     }
 
-    // מציאת המשתמש
     const user = await User.findById(decoded.userId);
     if (!user) {
       return res.status(404).json({ error: "משתמש לא נמצא" });
     }
 
-    // בדיקת קוד ותוקף
     if (user.code !== Number(code)) {
       return res.status(400).json({ error: "קוד לא נכון" });
     }
@@ -387,7 +384,6 @@ export const verifyAdminOtp = async (
       return res.status(400).json({ error: "הקוד פג תוקף" });
     }
 
-    // ניקוי הקוד מהמשתמש אחרי שימוש
     user.code = undefined;
     user.codeExpiresAt = undefined;
     await user.save();
@@ -399,7 +395,6 @@ export const verifyAdminOtp = async (
       path: "/",
     });
 
-    // יצירת טוקן התחברות אמיתי (1 יום למשל)
     const loginToken = jwt.sign(
       {
         userId: user._id,
