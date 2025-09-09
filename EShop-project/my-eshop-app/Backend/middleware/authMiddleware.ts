@@ -10,9 +10,9 @@ export interface MyJwtPayload extends JwtPayload {
   userId: string;
   role: string;
   userName: string;
-  email : string
+  email: string;
 }
-      
+
 // הרחבת טיפוס ה־ Request של Express כך שיכיל שדה user (שיתווסף אחרי אימות הטוקן)
 declare module "express-serve-static-core" {
   interface Request {
@@ -27,7 +27,7 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   // שולף את הטוקן מהעוגיות
-  const token = req.cookies?.token;
+  const token = req.cookies?.userToken || req.cookies?.adminToken;
   const JWT_SECRET = process.env.JWT_SECRET;
 
   // אם אין טוקן המשתמש לא מחובר
