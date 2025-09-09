@@ -8,6 +8,7 @@ import {
   switchPermissions,
   totalUsers,
   updateProfile,
+  
 } from "../controllers/userController.ts";
 import { isAdmin } from "../middleware/isAdmin.ts"; // אימות מנהל
 import { authAdmin } from "../middleware/authAdmin.ts"; // אימות משתמש
@@ -20,7 +21,7 @@ const router = express.Router();
 
 router.post(
   "/admin/switchPermissions/:id",
-  authMiddleware,
+  authAdmin,
   isAdmin,
   switchPermissions
 );
