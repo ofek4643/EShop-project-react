@@ -149,7 +149,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
       { expiresIn: "1d" }
     );
 
-    res.cookie("token", token, {
+    res.cookie("userToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -171,7 +171,7 @@ export const logout = async (
   res: Response
 ): Promise<Response> => {
   try {
-    res.clearCookie("token", {
+    res.clearCookie("userToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -191,7 +191,7 @@ export const logoutAdmin = async (
   res: Response
 ): Promise<Response> => {
   try {
-    res.clearCookie("token", {
+    res.clearCookie("adminToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -347,7 +347,7 @@ export const loginAdmin = async (
       expiresIn: "10m",
     });
 
-    res.cookie("token", Token, {
+    res.cookie("tokenCode", Token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -411,7 +411,7 @@ export const verifyAdminOtp = async (
     user.codeExpiresAt = undefined;
     await user.save();
 
-    res.clearCookie("token", {
+    res.clearCookie("tokenCode", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -429,7 +429,7 @@ export const verifyAdminOtp = async (
       { expiresIn: "4h" }
     );
 
-    res.cookie("token", loginToken, {
+    res.cookie("adminToken", loginToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
