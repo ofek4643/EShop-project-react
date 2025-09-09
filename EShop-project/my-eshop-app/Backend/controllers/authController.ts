@@ -173,8 +173,9 @@ export const logout = async (
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
     });
     return res.status(200).json({ message: "התנתקת בהצלחה" });
   } catch (error) {
