@@ -154,7 +154,6 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000,
-      domain: "shop.eshop.com",
       path: "/",
     });
     return res.status(201).json({ message: "משתמש התחבר בהצלחה!" });
@@ -194,8 +193,8 @@ export const logoutAdmin = async (
   try {
     res.clearCookie("adminToken", {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/",
     });
     return res.status(200).json({ message: "התנתקת בהצלחה" });
@@ -433,9 +432,9 @@ export const verifyAdminOtp = async (
     res.cookie("adminToken", loginToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict", // <- זה מונע שליחת cookie ל־Shop
+      sameSite: "lax", // או none אם אתה ב־subdomain אחר
       maxAge: 4 * 60 * 60 * 1000,
-      path: "/",
+      path: "/", // domain לא מגדירים
     });
 
     return res.status(200).json({
