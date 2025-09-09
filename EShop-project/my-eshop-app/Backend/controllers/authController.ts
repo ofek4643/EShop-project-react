@@ -371,13 +371,13 @@ export const verifyAdminOtp = async (
 ): Promise<Response> => {
   try {
     const { code }: { code: string } = req.body;
-    const { token } = req.cookies;
+    const { tokenCode } = req.cookies;
 
     if (!code || code.length !== 6) {
       return res.status(400).json({ error: "קוד לא תקין" });
     }
 
-    if (!token) {
+    if (!tokenCode) {
       return res.status(400).json({ error: "חסר טוקן" });
     }
 
@@ -386,7 +386,7 @@ export const verifyAdminOtp = async (
 
     let decoded: MyJwtPayload;
     try {
-      decoded = jwt.verify(token, JWT_SECRET) as MyJwtPayload;
+      decoded = jwt.verify(tokenCode, JWT_SECRET) as MyJwtPayload;
     } catch (err: any) {
       if (err instanceof TokenExpiredError) {
         return res.status(401).json({ error: "הטוקן פג תוקף" });
