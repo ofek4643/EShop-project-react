@@ -1,7 +1,5 @@
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
-
-// מייבא את שגיאות ברירת המחדל של jwt לטיפול ייחודי
 export const { TokenExpiredError, JsonWebTokenError } = jwt;
 import { Request, Response, NextFunction } from "express";
 
@@ -19,28 +17,15 @@ declare module "express-serve-static-core" {
     user: MyJwtPayload;
   }
 }
-
-// Middleware לאימות משתמשים JWT
-export const authMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  // שולף את הטוקן מהעוגיות
-  const token = req.cookies?.userToken
+export const authAdmin = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies?.adminToken;
   const JWT_SECRET = process.env.JWT_SECRET;
+  if (!token) return res.status(401).json({ error: "אדמין לא מחובר" });
+  if (!JWT_SECRET) throw new Error("חסר מפתח סודי של טוקן");
 
-  // אם אין טוקן המשתמש לא מחובר
-  if (!token) return res.status(401).json({ error: "משתמש לא מחובר" });
-  if (!JWT_SECRET) {
-    throw new Error("חסר מפתח סודי של טוקן");
-  }
   try {
-    // מאמת את הטוקן ומחזיר את הנתונים המקוריים שנשמרו בו
     const decoded = jwt.verify(token, JWT_SECRET) as MyJwtPayload;
     req.user = decoded;
-
-    // ממשיך ל route הבא
     next();
   } catch (error: unknown) {
     if (error instanceof TokenExpiredError) {

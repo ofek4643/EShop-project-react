@@ -10,6 +10,8 @@ import {
   updateProfile,
 } from "../controllers/userController.ts";
 import { isAdmin } from "../middleware/isAdmin.ts"; // אימות מנהל
+import { authAdmin } from "../middleware/authAdmin.ts"; // אימות משתמש
+
 
 // ייבוא Express ו־Middleware לאימות משתמשים
 import express from "express";
@@ -22,10 +24,10 @@ router.post(
   isAdmin,
   switchPermissions
 );
-router.get("/admin/:id", authMiddleware, isAdmin, fetchUserById);
-router.delete("/admin/delete/:id", authMiddleware, isAdmin, deleteUser);
-router.get("/admin/list/users", authMiddleware, isAdmin, totalUsers);
-router.get("/admin", authMiddleware, isAdmin, fetchAdmin);
+router.get("/admin/:id", authAdmin, isAdmin, fetchUserById);
+router.delete("/admin/delete/:id", authAdmin, isAdmin, deleteUser);
+router.get("/admin/list/users", authAdmin, isAdmin, totalUsers);
+router.get("/admin", authAdmin, isAdmin, fetchAdmin);
 router.get("/", authMiddleware, fetchUser);
 router.delete("/delete", authMiddleware, fetchDeleteUser);
 router.put("/profile", authMiddleware, updateProfile);
