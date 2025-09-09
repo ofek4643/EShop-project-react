@@ -432,9 +432,9 @@ export const verifyAdminOtp = async (
     res.cookie("adminToken", loginToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax", // או none אם אתה ב־subdomain אחר
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 4 * 60 * 60 * 1000,
-      path: "/", // domain לא מגדירים
+      path: "/",
     });
 
     return res.status(200).json({
