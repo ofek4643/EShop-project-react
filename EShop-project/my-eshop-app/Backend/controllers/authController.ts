@@ -195,7 +195,7 @@ export const logoutAdmin = async (
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      path: "/",
+      path: "/crm",
     });
     return res.status(200).json({ message: "התנתקת בהצלחה" });
   } catch (error) {
@@ -434,7 +434,7 @@ export const verifyAdminOtp = async (
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 4 * 60 * 60 * 1000,
-      path: "/",
+      path: "/crm",
     });
 
     return res.status(200).json({
