@@ -185,6 +185,26 @@ export const logout = async (
   }
 };
 
+// התנתקות אדמין
+export const logoutAdmin = async (
+  req: AuthRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    });
+    return res.status(200).json({ message: "התנתקת בהצלחה" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "אירעה שגיאה בשרת, נסה שוב מאוחר יותר" });
+  }
+};
+
 // שכחתי סיסמה
 export const forgotPassword = async (
   req: Request,
