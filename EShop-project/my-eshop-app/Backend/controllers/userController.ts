@@ -185,6 +185,9 @@ export const switchPermissions = async (
     if (!newRole || (newRole !== "user" && newRole !== "admin")) {
       return res.status(400).json({ error: "רול לא קיים" });
     }
+    if (user._id.equals(admin._id)) {
+      return res.status(400).json({ error: "אי אפשר לשנות את הראשות של עצמך" });
+    }
     user.role = newRole;
     await user.save();
     return res.status(201).json({ message: "הראשות עודכנו בהצלחה" });
