@@ -99,6 +99,7 @@ export const updateProfile = async (
   }
 };
 
+// אדמין - משיכת משתמשים
 export const totalUsers = async (
   req: AuthRequest,
   res: Response
@@ -111,6 +112,7 @@ export const totalUsers = async (
   }
 };
 
+// אדמין - מחיקת משתמש
 export const deleteUser = async (
   req: AuthRequest,
   res: Response
@@ -124,7 +126,11 @@ export const deleteUser = async (
   }
 };
 
-export const fetchUserById = async (req, res) => {
+// אדמין - שליפת משתמש על פי ID
+export const fetchUserById = async (
+  req: AuthRequest,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
@@ -139,6 +145,7 @@ export const fetchUserById = async (req, res) => {
   }
 };
 
+// שליפת משתמש אדמין
 export const fetchAdmin = async (
   req: AuthRequest,
   res: Response
@@ -157,14 +164,18 @@ export const fetchAdmin = async (
   }
 };
 
-export const switchPermissions = async (req, res) => {
+// אדמין - שינוי הרשאות למשתמש
+export const switchPermissions = async (
+  req: AuthRequest,
+  res: Response
+): Promise<Response> => {
   try {
     const userId = req.user.userId;
     const { id } = req.params;
     const { newRole } = req.body;
     const user = await User.findById(id);
     const admin = await User.findById(userId);
-    
+
     if (admin?.role !== "superAdmin") {
       return res.status(403).json({ error: "אין לך הרשאה לשנות הרשאות" });
     }

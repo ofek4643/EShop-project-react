@@ -8,7 +8,7 @@ import {
   removeOneItemCart,
   syncCart,
 } from "../controllers/cartController.ts";
-import { authMiddleware } from "../middleware/authMiddleware.ts";
+import { authMiddleware } from "../middleware/authMiddleware.ts";  // אימות משתמש
 import express from "express";
 const router = express.Router();
 

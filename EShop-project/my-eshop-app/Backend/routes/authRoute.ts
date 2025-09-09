@@ -9,7 +9,7 @@ import {
   loginAdmin,
   verifyAdminOtp,
 } from "../controllers/authController";
-import { authMiddleware } from "../middleware/authMiddleware.ts";
+import { authMiddleware } from "../middleware/authMiddleware.ts";  // אימות משתמש
 import express from "express";
 const router = express.Router();
 

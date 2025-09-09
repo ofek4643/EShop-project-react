@@ -7,6 +7,7 @@ import { AppDispatch } from "../../store/store";
 import { addAddress } from "../../store/slices/addressSlice";
 import { useNavigate } from "react-router-dom";
 
+// קומפוננטה לכתבות משלוח
 const AddressDelivery: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

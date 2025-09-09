@@ -7,8 +7,8 @@ import {
   getOrdersAdmin,
   deleteOrdersAdmin,
 } from "../controllers/orderController";
-import { authMiddleware } from "../middleware/authMiddleware.ts";
-import { isAdmin } from "../middleware/isAdmin.ts";
+import { authMiddleware } from "../middleware/authMiddleware.ts";  // אימות משתמש
+import { isAdmin } from "../middleware/isAdmin.ts";  // אימות מנהל
 import express from "express";
 const router = express.Router();
 

@@ -1,4 +1,5 @@
 import styles from "../Accessibility/Accessibility.module.css";
+
 // קומפוננטה להצהרת נגישות
 const Accessibility = () => {
   return (

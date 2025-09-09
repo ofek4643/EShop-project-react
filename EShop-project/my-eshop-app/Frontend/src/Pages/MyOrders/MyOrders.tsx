@@ -5,10 +5,12 @@ import { getAllOrderApi } from "../../api/order";
 import { handleAxiosError } from "../../utils/errorHandler";
 import { Order } from "../../types/Order";
 
+// קומפוננטה להזמנות שלי
 const MyOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // שליפת ההזמנות מהשרת
   useEffect(() => {
     const fetchOrders = async () => {
       try {

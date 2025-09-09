@@ -1,7 +1,7 @@
 // ייבוא פונקציות Controllers עבור פעולות המשתמש
 import express from "express";
 import { captureOrder } from "../controllers/paymentController";
-import { authMiddleware } from "../middleware/authMiddleware.ts";
+import { authMiddleware } from "../middleware/authMiddleware.ts";  // אימות משתמש
 const router = express.Router();
 
 router.post("/capture-order", authMiddleware, captureOrder);

@@ -48,10 +48,13 @@ export const removeItemCart = async (data: DataUpdateItem) => {
   const res = await api.delete(`/cart/removeItem`, { data });
   return res.data;
 };
+
+// מיזוג עגלות של אורח ומשתמש
 export const syncCart = async (data: DataSyncCart) => {
   await api.post(`/cart/sync`, data);
 };
 
+// ניקוי העגלה אחרי קנייה
 export const clearCartApi = async () => {
   await api.delete(`/cart/clear`);
 };

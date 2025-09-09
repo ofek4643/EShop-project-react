@@ -271,6 +271,7 @@ export const resetPassword = async (
   }
 };
 
+// התחברות אדמין
 export const loginAdmin = async (
   req: Request,
   res: Response
@@ -322,7 +323,7 @@ export const loginAdmin = async (
     }
 
     const Token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-      expiresIn: "15m",
+      expiresIn: "10m",
     });
 
     res.cookie("token", Token, {
@@ -342,6 +343,7 @@ export const loginAdmin = async (
   }
 };
 
+// בדיקת קוד להתחברות אדמין
 export const verifyAdminOtp = async (
   req: Request,
   res: Response

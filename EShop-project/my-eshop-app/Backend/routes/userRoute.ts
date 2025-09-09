@@ -9,11 +9,11 @@ import {
   totalUsers,
   updateProfile,
 } from "../controllers/userController.ts";
-import { isAdmin } from "../middleware/isAdmin.ts";
+import { isAdmin } from "../middleware/isAdmin.ts"; // אימות מנהל
 
 // ייבוא Express ו־Middleware לאימות משתמשים
 import express from "express";
-import { authMiddleware } from "../middleware/authMiddleware.ts";
+import { authMiddleware } from "../middleware/authMiddleware.ts"; // אימות משתמש
 const router = express.Router();
 
 router.post(

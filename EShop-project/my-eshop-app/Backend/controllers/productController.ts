@@ -1,5 +1,5 @@
 import Product from "../models/Product";
-import { Request, Response } from "express"; // טיפוסים של Express
+import { Request, Response } from "express";
 
 // שליפת כל המוצרים ממסד הנתונים
 export const getAllProducts = async (
@@ -56,6 +56,7 @@ export const addProduct = async (
   }
 };
 
+// אדמין - שליפת מוצר לפי ID
 export const getProductById = async (
   req: Request,
   res: Response
@@ -74,7 +75,11 @@ export const getProductById = async (
   }
 };
 
-export const updateProductById = async (req, res) => {
+// אדמין - עדכון מוצר לפי ID
+export const updateProductById = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
     const { name, price, stock, description, imageUrl } = req.body;
@@ -115,7 +120,11 @@ export const updateProductById = async (req, res) => {
   }
 };
 
-export const deleteProduct = async (req, res) => {
+// אדמין - מחיקת מוצר לפי ID
+export const deleteProduct = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
     await Product.findByIdAndDelete(id);

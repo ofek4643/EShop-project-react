@@ -6,7 +6,6 @@ import {
   removeFromCart,
   addOneItem,
   removeOneItem,
-  // mergeGuestToUserCart,
   fetchUserCartThunk,
   addOneItemThunk,
   removeOneItemThunk,
@@ -14,6 +13,8 @@ import {
 } from "../../store/slices/cartSlice";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+
+// קומפוננטה לעגלה
 
 const Cart = () => {
   // משיכה ושימוש בפועלות ונתונים בחנות
