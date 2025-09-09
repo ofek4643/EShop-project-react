@@ -194,8 +194,8 @@ export const logoutAdmin = async (
   try {
     res.clearCookie("adminToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict", // <- זה מונע שליחת cookie ל־Shop
+      secure: true,
+      sameSite: "none",
       path: "/",
     });
     return res.status(200).json({ message: "התנתקת בהצלחה" });
