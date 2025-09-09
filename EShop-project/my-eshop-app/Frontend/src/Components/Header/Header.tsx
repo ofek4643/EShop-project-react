@@ -38,9 +38,14 @@ const Header: React.FC = () => {
   useEffect(() => {
     if (status === "idle") {
       dispatch(getUserThunk());
-      dispatch(fetchUserCartThunk());
     }
   }, [dispatch, status]);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchUserCartThunk());
+    }
+  }, [user, dispatch]);
 
   //פונקציה להתנתקות
   const logout = async () => {
