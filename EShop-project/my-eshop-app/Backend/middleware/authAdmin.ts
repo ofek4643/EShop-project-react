@@ -17,6 +17,8 @@ declare module "express-serve-static-core" {
     user: MyJwtPayload;
   }
 }
+
+// Middleware לאימות מנהלים JWT
 export const authAdmin = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies?.adminToken;
   const JWT_SECRET = process.env.JWT_SECRET;

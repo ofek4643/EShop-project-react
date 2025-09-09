@@ -11,8 +11,8 @@ import {
   logoutAdmin,
 } from "../controllers/authController";
 import { authMiddleware } from "../middleware/authMiddleware.ts"; // אימות משתמש
-import { authAdmin } from "../middleware/authAdmin.ts"; // אימות משתמש
-import { isAdmin } from "../middleware/isAdmin.ts"; // אימות מנהל
+import { authAdmin } from "../middleware/authAdmin.ts"; // אימות מנהל
+import { isAdmin } from "../middleware/isAdmin.ts"; // בדיקת הרשאות מנהל
 import express from "express";
 const router = express.Router();
 

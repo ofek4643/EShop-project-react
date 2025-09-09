@@ -7,9 +7,8 @@ import {
   getProductById,
   updateProductById,
 } from "../controllers/productController";
-import { isAdmin } from "../middleware/isAdmin.ts"; // אימות מנהל
-import { authMiddleware } from "../middleware/authMiddleware.ts"; // אימות משתמש
-import { authAdmin } from "../middleware/authAdmin.ts"; // אימות משתמש
+import { isAdmin } from "../middleware/isAdmin.ts"; // בדיקת הראשות מנהל
+import { authAdmin } from "../middleware/authAdmin.ts"; // אימות מנהל
 
 const router = express.Router();
 
