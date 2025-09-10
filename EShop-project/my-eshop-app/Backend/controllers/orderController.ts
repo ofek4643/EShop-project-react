@@ -17,6 +17,22 @@ export const getOrder = async (
       .json({ error: "אירעה שגיאה בשרת, נסה שוב מאוחר יותר" });
   }
 };
+// אדמין - שליפת הזמנה
+export const getOrderAdmin = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+    return res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "אירעה שגיאה בשרת, נסה שוב מאוחר יותר" });
+  }
+};
 
 // עדכון סטטוס הזמנה על פי ID
 export const updateDelivered = async (
