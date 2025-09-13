@@ -10,7 +10,7 @@ E-Shop הוא פרויקט חנות אונליין שנבנה באמצעות **R
 - **Frontend:** React, TypeScript, React Router, Redux Toolkit, Axios, CSS Modules
 - **Backend:** Node.js, Express.js, TypeScript
 - **Database:** MongoDB
-- **Authentication:** JWT + bcrypt (התחברות / הרשמה / שחזור סיסמה)
+- **Authentication:** JWT + Cookies + bcrypt (התחברות / הרשמה / שחזור סיסמה)
 - **Authorization:** authMiddleware לאימות טוקנים, isAdmin להגבלת גישת מנהלים
 - **Deployment:** Render
 
