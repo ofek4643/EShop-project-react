@@ -2,17 +2,22 @@ import nodemailer from "nodemailer";
 
 export async function sendEmail(to: string, subject: string, html: string) {
   try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error("❌ חסרים משתני סביבה EMAIL_USER / EMAIL_PASS");
-    }
+    console.log(
+      "📧 EMAIL_USER:",
+      process.env.EMAIL_USER ? "******" : "לא מוגדר"
+    );
+    console.log(
+      "📧 EMAIL_PASS:",
+      process.env.EMAIL_PASS ? "******" : "לא מוגדר"
+    );
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
       secure: false,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.EMAIL_USER!,
+        pass: process.env.EMAIL_PASS!,
       },
     });
 
@@ -26,7 +31,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
     console.log("✅ מייל נשלח בהצלחה:", info.messageId);
     return info;
   } catch (error: any) {
-    console.error("❌ שגיאה בשליחת מייל:", error.message || error);
+    console.error("❌ שגיאה בשליחת מייל:", error);
     throw new Error("שליחת האימייל נכשלה");
   }
 }
