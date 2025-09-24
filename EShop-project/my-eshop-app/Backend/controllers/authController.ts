@@ -41,7 +41,6 @@ export const register = async (
     if (existingEmail)
       return res.status(400).json({ error: "האימייל כבר רשום במערכת" });
 
-    // Hash לסיסמא
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // יצירת משתמש חדש
@@ -55,17 +54,16 @@ export const register = async (
 
     await newUser.save();
 
-    // JWT
     const JWT_SECRET = process.env.JWT_SECRET;
     if (!JWT_SECRET) throw new Error("חסר מפתח סודי של טוקן");
 
     const verificationToken = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
       expiresIn: "15m",
     });
+
     const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
     const verifyUrl = `${FRONTEND_URL}/verify/${newUser._id}/${verificationToken}`;
 
-    // ---- התחלה של SendGrid ----
     const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
     const EMAIL_USER = process.env.EMAIL_USER;
 
@@ -76,7 +74,7 @@ export const register = async (
 
     const msg = {
       to: email,
-      from: EMAIL_USER, // חייב להיות Verified Sender ב-SendGrid
+      from: EMAIL_USER,
       subject: "אימות כתובת האימייל שלך",
       html: `
         <h1>שלום ${userName},</h1>
@@ -86,7 +84,6 @@ export const register = async (
     };
 
     await sgMail.send(msg);
-    // ---- סוף שליחת מייל ----
 
     return res
       .status(201)
@@ -244,16 +241,27 @@ export const forgotPassword = async (
 
     const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
 
-    await sendEmail(
-      user.email,
-      "איפוס סיסמה",
-      `
+    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+    const EMAIL_USER = process.env.EMAIL_USER;
+
+    if (!SENDGRID_API_KEY) throw new Error("SENDGRID_API_KEY missing in .env");
+    if (!EMAIL_USER) throw new Error("EMAIL_USER missing in .env");
+
+    sgMail.setApiKey(SENDGRID_API_KEY);
+
+    const msg = {
+      to: user.email,
+      from: EMAIL_USER,
+      subject: "איפוס סיסמה",
+      html: `
         <h1>שלום ${user.userName},</h1>
         <p>ביקשת לאפס את הסיסמה שלך.</p>
         <p>אנא לחץ על הקישור הבא כדי לבחור סיסמה חדשה (בתוקף ל-15 דקות):</p>
         <a href="${resetUrl}">${resetUrl}</a>
-      `
-    );
+      `,
+    };
+
+    await sgMail.send(msg);
 
     return res.json({ message: "אם האימייל קיים, נשלח קישור לאיפוס" });
   } catch (error) {
@@ -343,15 +351,26 @@ export const loginAdmin = async (
     user.codeExpiresAt = expiresAt;
     await user.save();
 
-    await sendEmail(
-      user.email,
-      "קוד אימות כניסה - E-Shop CRM",
-      `
+    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+    const EMAIL_USER = process.env.EMAIL_USER;
+
+    if (!SENDGRID_API_KEY) throw new Error("SENDGRID_API_KEY missing in .env");
+    if (!EMAIL_USER) throw new Error("EMAIL_USER missing in .env");
+
+    sgMail.setApiKey(SENDGRID_API_KEY);
+
+    const msg = {
+      to: user.email,
+      from: EMAIL_USER,
+      subject: "קוד אימות כניסה - E-Shop CRM",
+      html: `
         <h1>שלום ${user.userName},</h1>
         <h2>קוד האימות שלך הוא: ${randomNumber}</h2>
         <span>הקוד בתוקף ל-10 דקות.</span>
-      `
-    );
+      `,
+    };
+
+    await sgMail.send(msg);
 
     const JWT_SECRET = process.env.JWT_SECRET;
     if (!JWT_SECRET) {
