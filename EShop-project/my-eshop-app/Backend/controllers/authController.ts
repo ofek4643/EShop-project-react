@@ -97,6 +97,30 @@ export const register = async (
   }
 };
 
+// אימות משתמש
+export const verifyUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { userId, token } = req.params;
+    const JWT_SECRET = process.env.JWT_SECRET;
+
+    if (!JWT_SECRET) {
+      throw new Error("Missing JWT secret");
+    }
+
+    jwt.verify(token, JWT_SECRET);
+
+    await User.findByIdAndUpdate(userId, { verified: true });
+
+    return res.status(200).json({ message: "האימייל אומת בהצלחה!" });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(400).json({ error: "קישור האימות לא חוקי או שפג תוקפו" });
+  }
+};
+
 // התחברות משתמש
 export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
