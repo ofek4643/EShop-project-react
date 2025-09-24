@@ -25,6 +25,9 @@ export const register = async (
   res: Response
 ): Promise<Response> => {
   try {
+    console.log("📩 Register API נקרא");
+    console.log("📥 Body:", req.body);
+
     const {
       userName,
       email,
@@ -32,7 +35,10 @@ export const register = async (
     }: { userName: string; email: string; password: string } = req.body;
 
     const existingUserName = await User.findOne({ userName });
+    console.log("🔍 בדיקת userName:", existingUserName ? "קיים" : "לא קיים");
+
     const existingEmail = await User.findOne({ email });
+    console.log("🔍 בדיקת email:", existingEmail ? "קיים" : "לא קיים");
 
     if (existingUserName)
       return res.status(400).json({ error: "שם המשתמש כבר רשום במערכת" });
@@ -41,6 +47,7 @@ export const register = async (
       return res.status(400).json({ error: "האימייל כבר רשום במערכת" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("🔑 סיסמה הוצפנה בהצלחה");
 
     const newUser = new User({
       userName,
@@ -51,6 +58,7 @@ export const register = async (
     });
 
     await newUser.save();
+    console.log("✅ משתמש נשמר במסד נתונים:", newUser._id);
 
     const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -61,10 +69,11 @@ export const register = async (
     const verificationToken = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
       expiresIn: "15m",
     });
+    console.log("🔐 נוצר טוקן אימות");
 
     const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-
     const verifyUrl = `${FRONTEND_URL}/verify/${newUser._id}/${verificationToken}`;
+    console.log("📧 לינק אימות:", verifyUrl);
 
     await sendEmail(
       email,
@@ -75,39 +84,16 @@ export const register = async (
         <a href="${verifyUrl}">${verifyUrl}</a>
       `
     );
+    console.log("✉️ מייל אימות נשלח ל:", email);
 
     return res
       .status(201)
       .json({ message: "נרשמת בהצלחה, אנא אמת את האימייל שלך" });
-  } catch (error) {
-    console.log(error.error);
+  } catch (error: any) {
+    console.error("❌ שגיאה ב־Register:", error.message || error);
     return res
       .status(500)
       .json({ error: "אירעה שגיאה בשרת, נסה שוב מאוחר יותר" });
-  }
-};
-
-// אימות משתמש
-export const verifyUser = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { userId, token } = req.params;
-    const JWT_SECRET = process.env.JWT_SECRET;
-
-    if (!JWT_SECRET) {
-      throw new Error("Missing JWT secret");
-    }
-
-    jwt.verify(token, JWT_SECRET);
-
-    await User.findByIdAndUpdate(userId, { verified: true });
-
-    return res.status(200).json({ message: "האימייל אומת בהצלחה!" });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(400).json({ error: "קישור האימות לא חוקי או שפג תוקפו" });
   }
 };
 
