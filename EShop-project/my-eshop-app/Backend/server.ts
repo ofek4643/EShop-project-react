@@ -15,16 +15,22 @@ import orderRouter from "./routes/orderRoute";
 // קריאת ENV
 dotenv.config();
 const app = express();
-// const allowedOrigins = [
-//   "http://localhost:5173",
-//   "http://localhost:5174",
-//   "https://eshop-project-react-1.onrender.com",
-//   "https://eshop-crm-react.onrender.com",
-// ];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://eshop-project-react-1.onrender.com",
+  "https://eshop-crm-react.onrender.com",
+];
 
 app.use(
   cors({
-    origin: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
