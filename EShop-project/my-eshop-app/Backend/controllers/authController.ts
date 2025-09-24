@@ -34,21 +34,20 @@ export const register = async (
       password,
     }: { userName: string; email: string; password: string } = req.body;
 
+    // בדיקה אם המשתמש או האימייל כבר קיימים
     const existingUserName = await User.findOne({ userName });
-    console.log("🔍 בדיקת userName:", existingUserName ? "קיים" : "לא קיים");
-
     const existingEmail = await User.findOne({ email });
-    console.log("🔍 בדיקת email:", existingEmail ? "קיים" : "לא קיים");
 
     if (existingUserName)
       return res.status(400).json({ error: "שם המשתמש כבר רשום במערכת" });
-
     if (existingEmail)
       return res.status(400).json({ error: "האימייל כבר רשום במערכת" });
 
+    // הצפנת הסיסמה
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("🔑 סיסמה הוצפנה בהצלחה");
 
+    // יצירת המשתמש במסד
     const newUser = new User({
       userName,
       email,
@@ -56,25 +55,21 @@ export const register = async (
       role: "user",
       verified: false,
     });
-
     await newUser.save();
     console.log("✅ משתמש נשמר במסד נתונים:", newUser._id);
 
     const JWT_SECRET = process.env.JWT_SECRET;
+    if (!JWT_SECRET) throw new Error("חסר מפתח סודי של טוקן");
 
-    if (!JWT_SECRET) {
-      throw new Error("חסר מפתח סודי של טוקן");
-    }
-
+    // יצירת טוקן אימות
     const verificationToken = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
       expiresIn: "15m",
     });
-    console.log("🔐 נוצר טוקן אימות");
-
     const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
     const verifyUrl = `${FRONTEND_URL}/verify/${newUser._id}/${verificationToken}`;
     console.log("📧 לינק אימות:", verifyUrl);
 
+    // שליחת מייל
     await sendEmail(
       email,
       "אימות כתובת האימייל שלך",
