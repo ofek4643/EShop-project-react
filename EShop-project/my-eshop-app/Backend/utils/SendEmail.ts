@@ -1,23 +1,18 @@
 import nodemailer from "nodemailer";
 
+// פונקציה כללית לשליחת מיילים
 export async function sendEmail(to: string, subject: string, html: string) {
   try {
-    console.log(
-      "📧 EMAIL_USER:",
-      process.env.EMAIL_USER ? "******" : "לא מוגדר"
-    );
-    console.log(
-      "📧 EMAIL_PASS:",
-      process.env.EMAIL_PASS ? "******" : "לא מוגדר"
-    );
+    console.log("📧 שולח מייל ל:", to);
+    console.log("📧 נושא:", subject);
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
+      port: 465, // פורט SSL
+      secure: true, // חובה עבור פורט 465
       auth: {
-        user: process.env.EMAIL_USER!,
-        pass: process.env.EMAIL_PASS!,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -31,7 +26,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
     console.log("✅ מייל נשלח בהצלחה:", info.messageId);
     return info;
   } catch (error: any) {
-    console.error("❌ שגיאה בשליחת מייל:", error);
+    console.error("❌ שגיאה בשליחת מייל:", error.message || error);
     throw new Error("שליחת האימייל נכשלה");
   }
 }
