@@ -339,12 +339,12 @@ export const loginAdmin = async (
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
-      return res
+      return res 
         .status(400)
         .json({ error: "אימייל או סיסמה לא נכונים, או שאינך מנהל" });
     }
 
-    const randomNumber = Math.floor(Math.random() * 1000000);
+    const randomNumber = Math.floor(100000 + Math.random() * 900000);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     user.code = randomNumber;
